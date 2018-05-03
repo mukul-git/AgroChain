@@ -1,84 +1,3 @@
-$("#sign-up-btn").click(function() {
-  
-  $("#sign-up-form").show();
-  $("#log-in-form").hide();
-  $("#payments-form").hide();
-  $("#approve-form").hide();
-  $("#finance-form").hide();
- 
-  $("#sign-up-btn").addClass("active");
-  $("#log-in-btn").removeClass("active");
-  $("#payments-btn").removeClass("active");
-  $("#Approve-btn").removeClass("active");
-  $("#finance-btn").removeClass("active");
- 
-});
-
-$("#log-in-btn").click(function() {
-  $("#sign-up-form").hide();
-  $("#log-in-form").show();
-  $("#payments-form").hide();
-  $("#approve-form").hide();
-  $("#finance-form").hide();
-  
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").addClass("active");
-  $("#payments-btn").removeClass("active");
-  $("#Approve-btn").removeClass("active");
-  $("#finance-btn").removeClass("active");
- 
-});
-
-$("#payments-btn").click(function() {
-  $("#sign-up-form").hide();
-  $("#log-in-form").hide();
-  $("#payments-form").show();
-  $("#approve-form").hide();
-  $("#finance-form").hide();
-  
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").removeClass("active");
-  $("#payments-btn").addClass("active");
-  $("#Approve-btn").removeClass("active");
-  $("#finance-btn").removeClass("active");
-});
-
-
-$("#Approve-btn").click(function() {
-  
-  $("#sign-up-form").hide();
-  $("#log-in-form").hide();
-  $("#payments-form").hide();
-  $("#approve-form").show();
-  $("#finance-form").hide();
-  
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").removeClass("active");
-  $("#payments-btn").removeClass("active");
-  $("#Approve-btn").addClass("active");
-  $("#finance-btn").removeClass("active");
-  
-  
-});
-
-$("#finance-btn").click(function() {
-  
-  $("#finance-form").show();
-  $("#sign-up-form").hide();
-  $("#log-in-form").hide();
-  $("#payments-form").hide();
-  $("#approve-form").hide();
- 
-  $("#finance-btn").addClass("active");
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").removeClass("active");
-  $("#payments-btn").removeClass("active");
-  $("#Approve-btn").removeClass("active");
- 
-});
-
-
-
 var accounts;
 var account;
 
@@ -87,6 +6,105 @@ function setStatus(message) {
   status.innerHTML = message;
 };
 
+function switchToHooked3(_keystore) {
+
+	console.log("switchToHooked3");
+
+	var web3Provider = new HookedWeb3Provider({
+	  host: "http://localhost:8545", // check in truffle.js
+	  transaction_signer: _keystore
+	});
+
+	web3.setProvider(web3Provider);
+}
+
+//create Wallet
+function RegisterUser() {
+	
+var metaset = StructStorage.deployed();
+
+var fname 		= document.getElementById("fname").value;
+var mname 		= document.getElementById("mname").value;
+var lname 		= document.getElementById("lname").value;
+var upassword 	= document.getElementById("password").value;
+var aadharid 	= parseInt(document.getElementById("aadharid").value);
+var caddress 	= document.getElementById("address").value;
+var contact 	= parseInt(document.getElementById("contact").value);
+var usertype 	= document.getElementById("selectUser").value;
+
+setStatus("Initiating transaction... (please wait)");
+  
+	var msgResult;
+	console.log("inside function");
+	
+	var secretSeed = lightwallet.keystore.generateRandomSeed();
+		
+
+	lightwallet.keystore.deriveKeyFromPassword(upassword, function (err, pwDerivedKey) {
+
+		console.log("createWallet");
+		
+		console.log(secretSeed);
+	
+		var keystore = new lightwallet.keystore(secretSeed, pwDerivedKey);
+		
+		keystore.generateNewAddress(pwDerivedKey);
+		// generate one new address/private key pairs
+		// the corresponding private keys are also encrypted
+		var address = keystore.getAddresses()[0];
+
+		var privateKey = keystore.exportPrivateKey(address, pwDerivedKey);
+		address1 = address;
+		
+	metaset.register( parseInt(address),fname,mname,lname,upassword,aadharid,caddress,contact,usertype, {from: account,gas:1500000}).then(function() {
+    
+		console.log("inside register");
+		console.log(usertype);
+		
+	}).catch(function(e) {
+    console.log(e);
+    setStatus("Error setting value; see log.");
+	});
+
+		/* $("#wallet").html("0x"+address);
+		$("#privateKey").html(privateKey);
+		$("#balance").html(getBalance(address));
+		*/
+		
+		console.log(address);
+		console.log(privateKey);
+		
+		// Now set ks as transaction_signer in the hooked web3 provider
+		// and you can start using web3 using the keys/addresses in ks!
+
+		switchToHooked3(keystore);
+		var lightwalletaddr = document.getElementById("lightwalletaddr");
+		lightwalletaddr.innerHTML = address;
+		
+		
+
+});
+	
+ metaset.fundaddr(parseInt(address), {from: account,gas:1000000}).then(function() {
+    
+  console.log("Account Funded!");
+ 
+    
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error setting value; see log.");
+  });
+  
+ /*  setTimeout(function(){
+		
+			refresh();
+						  
+		}, 8000); */
+	
+	// var address1 = keystore.getAddresses()[0];
+//	console.log(address1);
+	 
+};
 
 
 function set(){
@@ -106,37 +124,12 @@ setStatus("Initiating transaction... (please wait)");
 metaset.produce( fid,fname,loc,crop,contact,quantity,exprice, {from: account,gas:400000}).then(function() {
     
   setStatus("Transaction complete!");
-  $("#sign-up-form").hide();
-  $("#log-in-form").show();
-  $("#payments-form").hide();
-  
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").addClass("active");
-  $("#payments-btn").removeClass("active");
-    
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error setting value; see log.");
-  });
-  
-  metaset.fundaddr(parseInt(account), {from: account,gas:1000000}).then(function() {
-    
-  console.log("Account Funded!");
  
     
   }).catch(function(e) {
     console.log(e);
     setStatus("Error setting value; see log.");
   });
-  
-  setTimeout(function(){
-		
-			refresh();
-						  
-		}, 8000);
-  
- 
-  
   
 };
 
@@ -237,15 +230,7 @@ setStatus("Initiating transaction... (please wait)");
 metaset.quality( lotno,grade,mrp,testdate,expdate, {from: account,gas:400000}).then(function() {
   setStatus("Transaction complete!");
 	
-  $("#sign-up-form").hide();
-  $("#log-in-form").hide();
-  $("#payments-form").show();
-  $("#approve-form").hide();
-  
-  $("#sign-up-btn").removeClass("active");
-  $("#log-in-btn").removeClass("active");
-  $("#payments-btn").addClass("active");
-  $("#Approve-btn").removeClass("active");
+ 
 	
     
   }).catch(function(e) {
@@ -396,10 +381,57 @@ function printBlock() {
   blocknum.innerHTML = block.valueOf();
 };
 
+function redirect1(){
+	 window.location.href = "register.html";
+}
+
+function redirect1(){
+	 window.location.href = "index.html";
+}
+function redirect2(){
+	 window.location.href = "microfinance.html";
+}
+function redirect3(){  
+  
+  $("#log-in-form").hide();
+  $("#approve-form").show();
+  
+}
+
+function loginuser(){
+	var metaset 	= StructStorage.deployed();
+	var userid 		= document.getElementById("username").value;
+	var password1 	= document.getElementById("password").value;
+  
+   metaset.getusertype.call(parseInt(userid), {from: account}).then(function(value) {
+    
+    var pass = web3.toAscii(value[0]);
+	var str = web3.toAscii(value[1]);
+	console.log(pass);
+	console.log(str);
+	if ((password1.localeCompare(pass)==0)&& str.localeCompare("farmer")==0){
+	console.log("true");
+	window.location.href = "CropDetails.html";
+	}
+	else if ((password1.localeCompare(pass)==0)&& str.localeCompare("consumer")==0){
+	console.log("true");
+	window.location.href = "ListFarmer.html";
+	}
+    else if ((password1.localeCompare(pass)==0)&& str.localeCompare("government")==0){
+	console.log("true");
+	window.location.href = "quality.html";
+	}
+    
+    
+  }).catch(function(e) {
+    console.log(e);
+    setStatus("Error setting value; see log.");
+  });	
+}
+
 
 window.onload = function() {
-	$("#approve-form").hide();
-	$("#finance-form").hide();
+		
   web3.eth.getAccounts(function(err, accs) {
     if (err != null) {
       alert("There was an error fetching your accounts.");
@@ -414,8 +446,7 @@ window.onload = function() {
     accounts = accs;
     account = accounts[0];
 	
-	 var from_address = document.getElementById("SenderBalance");
-    from_address.innerHTML = web3.eth.accounts[0].valueOf(); 
+	
 
   });
 }

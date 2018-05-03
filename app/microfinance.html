@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agricultural Blockchain App</title>
+   <link href="./app.css" rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <h1>Agricultural Supply Chain Dapp</h1>
+  <h4>Public Id : <span class="white"><span id="SenderBalance"></span> </h4>
+  
+ <div class="form" id="finance-form">
+		<h2 class="form-title">Micro-Finance</h2>
+		
+
+		<input type="text" class="input-std" id="pfid" placeholder="Farmer Public Id">
+		<input type="text" class="input-std" id="lotnum" placeholder="Lot Number">
+		<input type="text" class="input-std" id="amount" placeholder="Fund Amount">
+		<table>
+		<tr><td><b><label class = "black">Balance</label></td><td>:</td></b><td><span class="black"><span class="black" span id="balance"></span>$</span></td></tr>
+		
+		</table>
+		<button type="button" class="btn-submit" id="getfund" onclick="fund()">Fund Farmer</button>
+		
+	<span id="status"></span>
+	</div>
+
+
+  
+   <link href="./app.css" rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+ 
+</body>
+</html>

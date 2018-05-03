@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AgroChain</title>
+ 
+  <link href="./app.css" rel='stylesheet' type='text/css'>
+ 
+		
+</head>
+<body>
+<div class="wrapper">
+  
+  
+  <h1>Farmer Details List</h1>
+  
+	
+	<div class="form" id="sign-up-form">
+		
+		
+		<h2 class="form-title">Farmer List</h2>
+		<select name="farmer" id="farmer" onchange="storage();getdetails()">
+        <option disabled="disabled" selected text-align:center >Farmer</option>
+		</select>
+		
+		
+		  <table id = "table1" style='display:none'>  
+			
+			<tr><td><b><label class = "black">Name</label></td><td>:</td></b><td><span class="black" span id="getval2"></span></td></tr>
+			<tr><td><b><label class = "black">Location</label></td><td>:</td></b><td><span class="black" span id="getval3"></span></td></tr>
+			<tr><td><b><label class = "black">Crop</label></td><td>:</td></b><td><span class="black" span id="getval4"></span></td></tr>
+			<tr><td><b><label class = "black">Contact</label></td><td>:</td></b><td><span class="black" span id="getval5"></span></td></tr>
+			<tr><td><b><label class = "black">Quantity</label><td>:</td></td></b><td><span class="black" span id="getval6"></span></td></tr> 
+			<tr><td><b><label class = "black">Price</label></td><td>:</td></b><td><span class="black" span id="getval7"></span></td></tr>
+			
+			</table>		   
+		   
+	
+		
+		
+				
+		<button type="button" class="btn-submit" id="submit_fund" onclick="redirect2()">Fund Farmer</button>
+	</div>
+	</div>
+				
+	    <script src="./app.js"></script>
+		 <script src="./farmer.js"></script>
+		
+	    
+</body>
+</html>
